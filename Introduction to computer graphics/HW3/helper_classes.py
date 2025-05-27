@@ -1,0 +1,292 @@
+import numpy as np
+import math
+
+
+# This function gets a vector and returns its normalized form.
+def normalize(vector):
+    return vector / np.linalg.norm(vector)
+
+
+# This function gets a vector and the normal of the surface it hit
+# This function returns the vector that reflects from the surface
+def reflected(vector, axis):
+    v = normalize(vector)
+    dot = np.dot(v, axis)
+    dot = np.multiply(2 * dot, axis)
+    v -= dot
+    return v
+
+
+## Lights
+
+
+class LightSource:
+    def __init__(self, intensity):
+        self.intensity = intensity
+
+
+class DirectionalLight(LightSource):
+
+    def __init__(self, intensity, direction):
+        super().__init__(intensity)
+
+        self.direction = normalize(direction)
+
+    # This function returns the ray that goes from the light source to a point
+    def get_light_ray(self,intersection_point):
+        return Ray(intersection_point, self.direction)
+
+    # This function returns the distance from a point to the light source
+    def get_distance_from_light(self, intersection):
+        
+        return math.inf
+
+    # This function returns the light intensity at a point
+    def get_intensity(self, intersection):
+        
+        return self.intensity
+
+
+class PointLight(LightSource):
+    def __init__(self, intensity, position, kc, kl, kq):
+        super().__init__(intensity)
+        self.position = np.array(position)
+        self.kc = kc
+        self.kl = kl
+        self.kq = kq
+
+    # This function returns the ray that goes from a point to the light source
+    def get_light_ray(self,intersection):
+        return Ray(intersection, normalize(self.position - intersection))
+
+    # This function returns the distance from a point to the light source
+    def get_distance_from_light(self,intersection):
+        return np.linalg.norm(intersection - self.position)
+
+    # This function returns the light intensity at a point
+    def get_intensity(self, intersection):
+        d = self.get_distance_from_light(intersection)
+        return self.intensity / (self.kc + self.kl*d + self.kq * (d**2))
+
+
+class SpotLight(LightSource):
+    def __init__(self, intensity, position, direction, kc, kl, kq):
+        super().__init__(intensity)
+        self.position = np.array(position)
+        self.direction = np.array(direction)
+        self.kc = kc
+        self.kl = kl
+        self.kq = kq
+
+
+    # This function returns the ray that goes from the light source to a point
+    def get_light_ray(self, intersection):
+        norm = normalize(self.position - intersection)
+
+        return Ray(intersection, norm)
+
+    def get_distance_from_light(self, intersection):
+
+        return np.linalg.norm(intersection - self.position)
+
+    def get_intensity(self, intersection):
+        tag_v = normalize(intersection - self.position)
+        dist = self.get_distance_from_light(intersection)
+        direct = -(self.direction / np.linalg.norm(self.direction))
+        
+        fact = self.kc + dist*self.kl + (dist ** 2)*self.kq
+        inten = self.intensity * np.dot(tag_v, direct)
+
+        return inten / fact
+
+
+class Ray:
+    def __init__(self, origin, direction):
+        self.origin = origin
+        self.direction = direction
+
+    # The function is getting the collection of objects in the scene and looks for the one with minimum distance.
+    # The function should return the nearest object and its distance (in two different arguments)
+    def nearest_intersected_object(self, objects):
+        intersections = None
+        nearest_object = None
+        min_distance = np.inf
+
+        for obj in objects:
+            intersection = obj.intersect(self)
+            if intersection is None:
+                continue
+            dist, _ = intersection
+            if dist < min_distance:
+                nearest_object = obj                
+                min_distance = dist
+
+    
+        return nearest_object, min_distance
+
+
+class Object3D:
+    def set_material(self, ambient, diffuse, specular, shininess, reflection):
+        self.ambient = ambient
+        self.diffuse = diffuse
+        self.specular = specular
+        self.shininess = shininess
+        self.reflection = reflection
+
+
+class Plane(Object3D):
+    def __init__(self, normal, point):
+        self.normal = np.array(normal)
+        self.point = np.array(point)
+
+    def intersect(self, ray: Ray):
+        v = self.point - ray.origin
+        t = np.dot(v, self.normal) / (np.dot(self.normal, ray.direction) + 1e-6)
+        if t > 0:
+            return t, self
+        else:
+            return None
+        
+    def get_forward_facing_normal(self, ray: Ray, intersection_point):
+        return -np.sign(np.dot(ray.direction, self.normal)) * self.normal
+
+
+class Triangle(Object3D):
+    """
+        C
+        /\
+       /  \
+    A /____\ B
+
+    The fornt face of the triangle is A -> B -> C.
+    
+    """
+    def __init__(self, a, b, c):
+        self.a = np.array(a)
+        self.b = np.array(b)
+        self.c = np.array(c)
+        self.normal = self.compute_normal()
+
+    # computes normal to the trainagle surface. Pay attention to its direction!
+    def compute_normal(self):
+        ba = self.b - self.a
+        ca = self.c - self.a
+        normal = np.cross(ba , ca)
+        #to add linalg.norm(norm)?
+        
+        return normal    
+
+    def intersect(self, ray: Ray):
+        ba = self.b - self.a
+        ca = self.c - self.a
+        h = np.cross(ray.direction, ca)
+        a = np.dot(ba, h)
+
+        if abs(a) < 0.00001:
+            return None
+        f = 1.0/a
+        s = ray.origin - self.a
+        u = f * np.dot(s , h)
+
+        if u < 0 or u >1:
+            return None
+        q = np.cross(s , ba)
+        v = f * np.dot(ray.direction , q)
+
+        if v < 0 or u + v >1:
+            return None
+        
+        t = f*np.dot(ca , q)
+        if t > 0 :
+            return t , self
+        else:
+            return None
+        
+    def get_forward_facing_normal(self, ray: Ray, intersection_point):
+        return -np.sign(np.dot(ray.direction, self.normal)) * self.normal
+
+class Pyramid(Object3D):
+    """     
+            D
+            /\*\
+           /==\**\
+         /======\***\
+       /==========\***\
+     /==============\****\
+   /==================\*****\
+A /&&&&&&&&&&&&&&&&&&&&\ B &&&/ C
+   \==================/****/
+     \==============/****/
+       \==========/****/
+         \======/***/
+           \==/**/
+            \/*/
+             E 
+    
+    Similar to Traingle, every from face of the diamond's faces are:
+        A -> B -> D
+        B -> C -> D
+        A -> C -> B
+        E -> B -> A
+        E -> C -> B
+        C -> E -> A
+    """
+    def __init__(self, v_list):
+        self.v_list = v_list
+        self.triangle_list = self.create_triangle_list()
+
+    def create_triangle_list(self):
+        l = []
+        t_idx = [
+                [0,1,3],
+                [1,2,3],
+                [0,3,2],
+                 [4,1,0],
+                 [4,2,1],
+                 [2,4,0]]
+        for ind in t_idx:
+            a,b,c = ind
+            tri = Triangle(self.v_list[a], self.v_list[b], self.v_list[c])
+            l.append(tri)
+        return l
+
+    def apply_materials_to_triangles(self):
+        for tri in self.triangle_list:
+            tri.set_material(self.ambient, self.diffuse, self.specular, self.shininess, self.reflection)
+
+    def intersect(self, ray: Ray):
+        obj, dis = ray.nearest_intersected_object(self.triangle_list)
+
+        if dis == np.infty:
+            return None
+        
+        return dis, self
+    
+    def get_forward_facing_normal(self, ray: Ray, intersection_point):
+        obj, dis = ray.nearest_intersected_object(self.triangle_list)
+        return obj.get_forward_facing_normal(ray, intersection_point)
+
+class Sphere(Object3D):
+    def __init__(self, center, radius: float):
+        self.center = center
+        self.radius = radius
+
+    def intersect(self, ray: Ray):
+        a = np.linalg.norm(ray.direction) ** 2
+        b = 2 * np.dot(ray.direction, ray.origin - self.center)
+        c = np.linalg.norm(ray.origin - self.center) ** 2 - self.radius ** 2
+        delta = b ** 2 - 4 * a * c
+        if delta <= 0:
+            return None
+        t1 = (-b + np.sqrt(delta)) / (2 * a)
+        t2 = (-b - np.sqrt(delta)) / (2 * a)
+        if t1 > 0 and t2 > 0:
+            return min(t1, t2), self
+        elif t1 > 0 or t2 > 0:
+            return max(t1, t2), self
+        return None
+    
+    def get_forward_facing_normal(self, ray: Ray, intersection_point):
+        return normalize(intersection_point - self.center)
+
+

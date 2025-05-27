@@ -1,0 +1,2 @@
+Objective
+Adopt or invent an application idea like a simple computer game or some other interactive program. Examples include Tetris, Snake, Hangman, Space Invaders, Sokoban, Pong, etc. Your job is to implement this application in Jack.

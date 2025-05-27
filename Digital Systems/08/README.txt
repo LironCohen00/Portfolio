@@ -1,0 +1,6 @@
+Objective:
+Extend the basic VM translator built in project 7 into a full-scale VM translator. In particular, in project 7 we focused on handling the stack arithmetic and memory access commands of the VM language. We now turn to handle the VM language's branching and function calling commands.
+
+Write a full-scale VM-to-Hack translator, extending the basic translator developed in project 7. Use your VM translator to translate VM programs, yielding corresponding programs written in the Hack assembly language.
+
+Note that a VM program may span either a single .vm file or a directory containing one or more .vm files. In the former case, the VM translator is invoked using the command VMTranslator fileName.vm. The translator creates an output file named fileName.asm, which is stored in the same directory of the input file. In the latter case, the VM translator is invoked using VMTranslator dirName. The translator creates a single output file named dirName.asm, which is stored in the same directory. This single file contains the assembly code resulting from translating all the .vm files in the input directory. The name of the input file or directory may contain a file path. If no path is specified, the VM translator operates on the current directory by default.

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+        @keyframes moveTitle {
+            0% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(100px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        h1 {
+	    color: blue;
+            animation: moveTitle 1s ease infinite;
+        }
+
+	.images {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	}
+
+	.images img {
+	    width: 200px;
+	    margin: 0 10px;
+	    height: 200px;
+	}
+   </style>
+</head>
+<body>
+<h1>Computer networks 2023: Exercise 1</h1>
+<h2 style="color: red;">Liron Cohen</h2>
+<div class="images">
+    <img src="confusedcatjpg.jpg">
+    <img src="huh_cat.jpg">
+</div>
+<a href="https://moodle.runi.ac.il/2024/course/view.php?id=2401572">Computer Network course website</a>
+<br>
+<a href="https://www.youtube.com">My favourite website</a>
+<hr>
+<form>
+        <label>Sender:</label>
+        <input type="text">
+
+        <label>ReceIver:</label>
+        <input type="text">
+
+	<label>Subject:</label>
+        <input type="text">
+
+        <label>Message:</label>
+        <textarea rows="4"></textarea>
+	<br>
+        <button type="submit" style="margin-top: 10px;">Submit</button>
+    </form>
+</body>
+</html>

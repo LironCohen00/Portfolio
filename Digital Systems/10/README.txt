@@ -1,0 +1,2 @@
+Objective:
+In this project we build a syntax analyzer that parses Jack programs according to the Jack grammar, producing an XML file that renders the program's structure using marked-up text. For each input .jack file, your analyzer should generate an .xml output file. 
