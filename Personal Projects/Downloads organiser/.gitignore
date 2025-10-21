@@ -1,0 +1,4 @@
+# Ignore Java build artifacts
+*.class
+org/
+META-INF/
