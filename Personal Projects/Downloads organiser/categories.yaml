@@ -1,0 +1,105 @@
+mime:
+  # Images
+  image/jpeg: images
+  image/png: images
+  image/gif: images
+  image/bmp: images
+  image/webp: images
+  image/svg+xml: images
+
+  # Videos
+  video/mp4: videos
+  video/x-msvideo: videos
+  video/quicktime: videos
+  video/x-matroska: videos
+  video/webm: videos
+  video/mpeg: videos
+
+  # Audio
+  audio/mpeg: audio
+  audio/wav: audio
+  audio/ogg: audio
+  audio/x-aac: audio
+  audio/flac: audio
+
+  # Documents
+  application/pdf: documents
+  text/plain: documents
+  application/msword: documents
+  application/vnd.openxmlformats-officedocument.wordprocessingml.document: documents
+  application/vnd.ms-excel: documents
+  application/vnd.openxmlformats-officedocument.spreadsheetml.sheet: documents
+  application/vnd.ms-powerpoint: documents
+  application/vnd.openxmlformats-officedocument.presentationml.presentation: documents
+
+  # Archives / Code / Other
+  application/zip: archives
+  application/x-7z-compressed: archives
+  application/x-rar-compressed: archives
+  application/gzip: archives
+  application/x-zip-compressed: archives
+  application/x-compressed: archives
+  application/java-archive: archives
+  application/x-executable: binaries
+  application/octet-stream: binaries
+  application/x-msdownload: binaries
+
+extensions:
+  # Documents (MIME detection inconsistent)
+  doc: documents
+  docx: documents
+  xls: documents
+  xlsx: documents
+  ppt: documents
+  pptx: documents
+  csv: documents
+  rtf: documents
+  odt: documents
+
+  # Archives & compressed files
+  zip: archives
+  rar: archives
+  7z: archives
+  tar: archives
+  gz: archives
+  bz2: archives
+  xz: archives
+  iso: archives
+
+  # Executables, installers & system files
+  exe: binaries
+  msi: binaries
+  bat: binaries
+  cmd: binaries
+  sh: binaries
+  jar: binaries
+  dll: binaries
+  sys: binaries
+
+  # Code, scripts & web files
+  py: code
+  java: code
+  class: code
+  c: code
+  cpp: code
+  h: code
+  cs: code
+  js: code
+  ts: code
+  html: code
+  htm: code
+  css: code
+  php: code
+  json: code
+  xml: code
+  yaml: code
+  yml: code
+  sql: code
+  md: code
+  ipynb: code
+  fbx: code
+  db: code
+  hs: code
+  ino: code
+  uproject: code
+  max: code
