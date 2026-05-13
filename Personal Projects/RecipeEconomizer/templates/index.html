@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Cost Optimizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍳 Recipe Cost Optimizer</h1>
+            <p class="subtitle">Find cheaper ingredient alternatives while maintaining nutritional value</p>
+        </header>
+
+        <div class="main-content">
+            <section class="input-section">
+                <h2>Create Your Recipe</h2>
+                <div class="recipe-name-input">
+                    <label for="recipeName">Recipe Name:</label>
+                    <input type="text" id="recipeName" placeholder="My Delicious Recipe" value="My Recipe">
+                </div>
+
+                <div class="ingredient-input">
+                    <label for="ingredientSearch">Search Ingredient:</label>
+                    <input type="text" id="ingredientSearch" placeholder="Type ingredient name...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+
+                <div id="selectedIngredients" class="selected-ingredients">
+                    <h3>Selected Ingredients:</h3>
+                    <div id="ingredientsList" class="ingredients-list">
+                        <p class="empty-state">No ingredients added yet. Search and add ingredients above.</p>
+                    </div>
+                </div>
+
+                <button id="analyzeBtn" class="btn-primary" disabled>Analyze Recipe</button>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div id="resultsContent"></div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let selectedIngredients = [];
+        let searchTimeout = null;
+
+        const ingredientSearch = document.getElementById('ingredientSearch');
+        const searchResults = document.getElementById('searchResults');
+        const ingredientsList = document.getElementById('ingredientsList');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultsSection = document.getElementById('resultsSection');
+
+        ingredientSearch.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const query = this.value.trim();
+
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                searchIngredient(query);
+            }, 500);
+        });
+
+        async function searchIngredient(query) {
+            try {
+                const response = await fetch('/search_ingredient', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: query })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    searchResults.innerHTML = `<div class="error">${data.error}</div>`;
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                if (data.results && data.results.length > 0) {
+                    let html = '<div class="results-list">';
+                    data.results.forEach(food => {
+                        html += `
+                            <div class="result-item">
+                                <div class="result-name">
+                                    <strong>${food.name}</strong>
+                                    ${food.brand ? `<br><small>${food.brand}</small>` : ''}
+                                </div>
+                                <div class="result-actions">
+                                    <input type="number" class="amount-input" placeholder="grams" value="100" min="1" onclick="event.stopPropagation()">
+                                    <button class="btn-add" onclick="addIngredient('${food.id}', '${food.name.replace(/'/g, "\\'")}', this)">Add</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    searchResults.innerHTML = html;
+                    searchResults.style.display = 'block';
+                } else {
+                    searchResults.innerHTML = '<div class="no-results">No results found</div>';
+                    searchResults.style.display = 'block';
+                }
+            } catch (error) {
+                searchResults.innerHTML = `<div class="error">Search failed: ${error.message}</div>`;
+                searchResults.style.display = 'block';
+            }
+        }
+
+        function addIngredient(id, name, button) {
+            const amountInput = button.previousElementSibling;
+            const amount = parseFloat(amountInput.value);
+            
+            if (!amount || isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount in grams');
+                return;
+            }
+            
+            if (selectedIngredients.some(ing => ing.id === id)) {
+                alert('Ingredient already added!');
+                return;
+            }
+
+            selectedIngredients.push({
+                id: id,
+                name: name,
+                amount: amount
+            });
+
+            updateIngredientsList();
+            
+            // Clear search and refocus
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+            ingredientSearch.value = '';
+            ingredientSearch.focus();
+        }
+
+        function removeIngredient(index) {
+            selectedIngredients.splice(index, 1);
+            updateIngredientsList();
+        }
+
+        function updateIngredientsList() {
+            if (selectedIngredients.length === 0) {
+                ingredientsList.innerHTML = '<p class="empty-state">No ingredients added yet. Search and add ingredients above.</p>';
+                analyzeBtn.disabled = true;
+                return;
+            }
+
+            let html = '';
+            selectedIngredients.forEach((ing, index) => {
+                html += `
+                    <div class="ingredient-item">
+                        <span><strong>${ing.name}</strong> - ${ing.amount}g</span>
+                        <button onclick="removeIngredient(${index})" class="btn-remove">Remove</button>
+                    </div>
+                `;
+            });
+
+            ingredientsList.innerHTML = html;
+            analyzeBtn.disabled = false;
+        }
+
+        analyzeBtn.addEventListener('click', async function() {
+            const recipeName = document.getElementById('recipeName').value || 'My Recipe';
+
+            if (selectedIngredients.length === 0) {
+                alert('Please add at least one ingredient');
+                return;
+            }
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = 'Analyzing...';
+
+            try {
+                const response = await fetch('/analyze_recipe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        recipe_name: recipeName,
+                        ingredients: selectedIngredients
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert(`Analysis failed: ${data.error}`);
+                    analyzeBtn.disabled = false;
+                    analyzeBtn.textContent = 'Analyze Recipe';
+                    return;
+                }
+
+                displayResults(data);
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                alert(`Analysis failed: ${error.message}`);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = 'Analyze Recipe';
+            }
+        });
+
+        function displayResults(data) {
+            const resultsContent = document.getElementById('resultsContent');
+
+            let html = `
+                <div class="summary-box">
+                    <h3>${data.recipe_name}</h3>
+                    <div class="cost-summary">
+                        <div class="cost-item">
+                            <span>Current Total Cost:</span>
+                            <strong>$${data.total_cost.toFixed(2)}</strong>
+                        </div>
+                        <div class="cost-item savings">
+                            <span>Potential Savings:</span>
+                            <strong>$${data.potential_savings.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Ingredient Analysis & Recommendations</h3>
+            `;
+
+            if (data.recommendations && data.recommendations.length > 0) {
+                data.recommendations.forEach(rec => {
+                    html += `
+                        <div class="recommendation-card">
+                            <div class="original-ingredient">
+                                <h4>${rec.original.name}</h4>
+                                <p>Amount: ${rec.original.amount}g | Cost: $${rec.original.item_cost.toFixed(2)}</p>
+                                <div class="nutrition-info">
+                                    <span>Protein: ${rec.original.nutritional_data.protein}g</span>
+                                    <span>Carbs: ${rec.original.nutritional_data.carbohydrates}g</span>
+                                    <span>Fat: ${rec.original.nutritional_data.fat}g</span>
+                                    <span>Calories: ${rec.original.nutritional_data.calories} kcal</span>
+                                </div>
+                            </div>
+
+                            <div class="alternatives">
+                                <h5>💡 Cheaper Alternatives:</h5>
+                                ${rec.alternatives.map(alt => `
+                                    <div class="alternative-item">
+                                        <div class="alt-header">
+                                            <strong>${alt.food.name}</strong>
+                                            <span class="savings-badge">Save $${alt.savings.toFixed(2)} (${alt.savings_percent.toFixed(0)}%)</span>
+                                        </div>
+                                        <p>Price: $${alt.alternative_price.toFixed(2)}/100g (vs $${alt.original_price.toFixed(2)}/100g)</p>
+                                        <p>Nutritional Similarity: ${(alt.nutritional_similarity * 100).toFixed(0)}%</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p>No cheaper alternatives found for your ingredients.</p>';
+            }
+
+            resultsContent.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
