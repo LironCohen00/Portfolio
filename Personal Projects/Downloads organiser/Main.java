@@ -27,8 +27,13 @@ public class Main {
                  if (category != null) {
                      Path targetDir = dir.resolve(category);
                      Files.createDirectories(targetDir);
-                     Files.move(file, targetDir.resolve(file.getFileName()),
-                                StandardCopyOption.REPLACE_EXISTING);
+                     try {
+                        Files.move(file, targetDir.resolve(file.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Moved " + file.getFileName() + " to " + category);
+                    } catch (Exception e) {
+                        System.err.println("Failed to move " + file.getFileName() + ": " + e.getMessage());
+                    }
+
                  } else {
                      System.out.println("Skipping unknown file: " + file.getFileName());
                  }
