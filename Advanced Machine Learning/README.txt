@@ -1,0 +1,1 @@
+This project is a Jupiter notebook in which I implemented the AdaBoost machine learning algorithm. Using generated test data, the program then performs 2 experiments - one on linearly separable data, and one on non-linearly separable data. It compares that accuracy of my AdaBoost algorithm to that of SKLearn's (machine learning library). 
