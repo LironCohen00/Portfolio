@@ -17,8 +17,6 @@ public class Maze {
   
   /** 
     * Constructor - reads image, and decomposes it into its connected components.
-    * After calling the constructor, the mazeHasSolution() and areConnected() methods
-	* are expect to return a correct solution.
     * 
     * @param fileName name of image file to process. 
     */ 
@@ -51,8 +49,6 @@ public class Maze {
  
    /** 
     * Generates a unique integer id from (x, y) coordinates. 
-    * It is suggested you implement this function, in order to transform
-	* pixels into valid indices for the UnionFind data structure.
     *
 	* @param x x-coordinate. 
     * @param y y-coordinate. 

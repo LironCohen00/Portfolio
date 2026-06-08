@@ -10,4 +10,4 @@ Topics covered:
 - Evaluation of tree depth vs. classification accuracy
 
 Language: Python
-Files: hw2.py (implementation), hw2.ipynb (notebook with experiments)
+Files: Main.py (implementation)

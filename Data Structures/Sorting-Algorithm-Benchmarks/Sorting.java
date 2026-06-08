@@ -45,7 +45,6 @@ public class Sorting{
 			}
 		}
 			//swap arr[i+1] and arr[high]
-		//System.out.println("i:" + i);
 		double Temp = arr[i + 1];
 		arr[i + 1] = arr[high];
 		arr[high] = Temp;
@@ -161,7 +160,7 @@ public class Sorting{
 	}
 	/**
 	 * Sorts a given array, using the counting sort algorithm.
-	 * You may assume that all elements in the array are between 0 and k (not including k).
+	 * Assume that all elements in the array are between 0 and k (not including k).
 	 * 
 	 * Should run in complexity O(n + k) in the worst case.
 	 * 

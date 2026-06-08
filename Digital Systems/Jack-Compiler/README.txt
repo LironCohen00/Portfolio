@@ -1,2 +1,2 @@
 Objective:
-Extend the syntax analyzer built in project 10 into a full-scale Jack compiler. The output of the compiler should be VM code designed to run on the virtual machine implemented in projects 7-8.
+Extend the syntax analyzer built in "Jack-Syntax-Analyzer" into a full-scale Jack compiler. The output of the compiler should be VM code designed to run on the virtual machine implemented in projects "VM-Translator-Arithmetic-and-Memory" and "VM-Translator-Control-and-Functions".

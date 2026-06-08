@@ -1,1 +1,0 @@
-Instructions for this assignment is in the "Ray Tracing Assignment" jupyter notebook

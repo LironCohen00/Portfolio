@@ -33,8 +33,6 @@ public class TaskHeap{
 	 * Constructs a heap that may contain 'capacity' many elements, from a given array of TaskElements, of size at most 'capacity'. 
 	 * This should be done according to the "build-heap" function studied in class.
 	 * NOTE: the heapIndex field of each TaskElement might be -1 (or incorrect).
-	 * You may NOT use the insert function of heap.
-	 * In this function you may use loops.
 	 * 
 	 */
 	public TaskHeap(TaskElement[] arr) {
@@ -43,7 +41,6 @@ public class TaskHeap{
 			heap[i] = arr[i - 1];
 			}
 		size = arr.length;	
-		//System.out.println(heap);
 		for (int i = size/2; i >= 1; i--) {
 			PercDown(i,size);
 		}
@@ -127,11 +124,6 @@ public class TaskHeap{
     
     /**
      * Removes the element located at the given index.
-     * 
-	 * Note: this function is not part of the standard heap API.
-	 *		 Make sure you understand how to implement it, and why it is required.
-	 *       There are several ways this function could be implemented. 
-	 * 		 No matter how you choose to implement it, you need to consider the different possible edge cases.
      * @param index
      */
     public void remove(int index){
@@ -170,42 +162,20 @@ public class TaskHeap{
 	}
     
     public static void main (String[] args){
-
-        	/*
-        	 * A basic test for the heap.
-        	 * You should be able to run this before implementing the queue.
-        	 * 
-        	 * Expected outcome: 
-        	 * 	task: Add a new feature, priority: 10
-    		 *	task: Solve a problem in production, priority: 100
-    		 *	task: Solve a problem in production, priority: 100
-    		 *	task: Develop a new feature, priority: 10
-    		 *	task: Code Review, priority: 3
-    		 *	task: Move to the new Kafka server, priority: 2
-        	 * 
-        	 */
         	
         	Task a = new Task(10, "Add a new feature");
-			//System.out.println(a);
         	Task b = new Task(3, "Code Review");
-			//System.out.println(b);
         	Task c = new Task(2, "Move to the new Kafka server");
-			//System.out.println(c);
         	TaskElement [] arr = {new TaskElement(b), new TaskElement(c), new TaskElement(a)};
         	TaskHeap heap = new TaskHeap(arr);
-		//	System.out.println(heap);
         	System.out.println(heap.findMax());
         	
         	Task d = new Task(100, "Solve a problem in production");
         	heap.insert(new TaskElement(d));
-			//System.out.println(heap);
 			
         	System.out.println(heap.findMax());
-			//System.out.println(heap);
 			System.out.println(heap.extractMax());
-			//System.out.println(heap);
             System.out.println(heap.extractMax());
-			//System.out.println(heap);
 			System.out.println(heap.extractMax());
 			System.out.println(heap.extractMax());
         

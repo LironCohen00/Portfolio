@@ -4,7 +4,6 @@
  * A queue class, implemented as a linked list.
  * The nodes of the linked list are implemented as the TaskElement class.
  * 
- * IMPORTANT: you may not use any loops/recursions in this class.
  */
 public class TaskQueue {
 

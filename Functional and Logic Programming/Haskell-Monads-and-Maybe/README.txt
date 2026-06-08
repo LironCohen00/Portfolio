@@ -1,7 +1,7 @@
 Haskell — Monads and Maybe/Either
 ==================================
 
-Exercises focused on monadic programming patterns and error-handling types
+Implementation focused on monadic programming patterns and error-handling types
 in Haskell.
 
 Topics covered:
@@ -11,4 +11,4 @@ Topics covered:
 - Chaining operations that may fail
 
 Language: Haskell
-File: HW2.hs
+File: Main.hs

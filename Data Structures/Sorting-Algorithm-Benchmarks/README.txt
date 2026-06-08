@@ -18,7 +18,6 @@ Benchmarking:
 
 Files:
 - Sorting.java              — all algorithm implementations and benchmarking logic
-- HW5 Instructions.pdf      — exercise specification
 - jfreechart-1.0.17.jar     — charting library
 - jcommon-1.0.21.jar        — JFreeChart dependency
 - plotter.jar               — plotting helper

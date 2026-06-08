@@ -12,6 +12,4 @@ Topics covered:
 
 Language: Python
 Files:
-- hw4.py                        — implementation
-- hw4_323929992_806614.ipynb    — notebook with experiments
-- training_set.csv / test_set.csv — dataset
+- Main.py

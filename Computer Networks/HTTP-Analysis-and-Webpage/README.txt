@@ -15,5 +15,5 @@ Part 2 — HTML Webpage (Webpage.html)
 Files:
 - Webpage.html        — the hand-coded HTML submission
 - HTTP-packets.pdf    — packet analysis writeup
-- HW1 Instructions.pdf — exercise specification
+- TheoreticalQuestions.pdf — theoretical exercise
 - confusedcatjpg.jpg, huh_cat.jpg — images embedded in the webpage

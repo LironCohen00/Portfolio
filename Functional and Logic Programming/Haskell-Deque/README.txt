@@ -10,4 +10,4 @@ Topics covered:
 - Deque operations: pushFront, pushBack, popFront, popBack
 
 Language: Haskell
-Files: HW5.hs, Deque.hs
+Files: Main.hs, Deque.hs

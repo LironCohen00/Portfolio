@@ -1,7 +1,7 @@
 Haskell — Trees and Infinite Lists
 ====================================
 
-Advanced Haskell exercises exploring recursive data structures and lazy evaluation.
+Advanced Haskell implementation of recursive data structures and lazy evaluation.
 
 Topics covered:
 - Binary tree serialization and deserialization
@@ -13,4 +13,4 @@ Topics covered:
 - Natural number generation using infinite streams
 
 Language: Haskell
-File: HW3.hs
+File: Main.hs

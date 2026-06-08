@@ -17,6 +17,5 @@ Files:
 - UnionFind.java    — Union-Find ADT with union-by-rank and path compression
 - Maze.java         — image loading, pixel decomposition, and solvability check
 - DisplayImage.java — renders the coloured component visualization
-- HW8 Instructions.pdf — exercise specification
 
 Language: Java

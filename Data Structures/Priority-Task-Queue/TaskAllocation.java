@@ -97,16 +97,6 @@ public class TaskAllocation{
 	}
 	
     public static void main (String[] args){
-    	/*
-    	 * A basic test to check your class.
-    	 * Expected outcome:
-    	 * task: Solve a problem in production, priority: 100
-    	 * task: Add a new feature, priority: 10
-    	 * task: Code Review, priority: 3
-    	 * task: Analyze performance, priority: 20
-    	 * task: Move to the new Kafka server, priority: 2
- 
-	     */
     
     	Task a = new Task(10, "Add a new feature");
     	Task b = new Task(3, "Code Review");

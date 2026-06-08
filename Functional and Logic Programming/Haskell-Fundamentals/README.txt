@@ -11,4 +11,4 @@ Topics covered:
 - Divisibility and number properties: sumDivisors, isAbundant
 
 Language: Haskell
-File: HW1.hs
+File: Main.hs

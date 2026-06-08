@@ -1,1 +1,1 @@
-In this folder of projects, the goal was to make my way through building a Hack computer, a compiler  start from building simple logic gates all the way up to an implementation of a full blown compiler. Each subdirectory has a README.txt that explains what part of 
+In this folder of projects, the goal was to make my way through building a Hack computer from building simple logic gates all the way up to an implementation of a full blown compiler as well as a high-level application in Jack. Each subdirectory has a README.txt that further explains it's objective and design.

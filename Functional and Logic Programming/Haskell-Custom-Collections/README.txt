@@ -10,4 +10,4 @@ Topics covered:
 - Building collection types with custom lookup and insertion logic
 
 Language: Haskell
-Files: HW4.hs, EqMap.hs, EqSet.hs
+Files: Main.hs, EqMap.hs, EqSet.hs

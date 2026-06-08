@@ -10,4 +10,4 @@ Topics covered:
 - Inference via marginalisation and the chain rule of probability
 
 Language: Python
-Files: hw3.py (implementation), hw3_323929992_806614.ipynb (notebook with experiments)
+Files: Main.py (implementation)

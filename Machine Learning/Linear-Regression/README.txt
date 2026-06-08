@@ -13,4 +13,4 @@ Topics covered:
 - Polynomial feature generation for non-linear regression
 
 Language: Python
-Files: hw1.py (implementation), hw1.ipynb (notebook with experiments)
+Files: Main.py (implementation)
