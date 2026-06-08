@@ -1,1 +1,0 @@
-All exercise instruction are in the .ipynb files (Jupyter notebooks)

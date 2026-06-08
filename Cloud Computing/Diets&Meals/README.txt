@@ -1,1 +1,16 @@
-This project consists of 4 services: a meals/dishes service, a diet service, a database service and a reverse-proxy service. The meals/dishes service provides RESTful APIs for the nutritional information of meals and dishes (a dish is comprised of 3 meals). The diet service provides post and get requests for different types of diets. The database service uses MongoDB to store all the dishes, meals and diets. The reverse-proxy service uses NGINX as a reverse proxy through which the requests are routed. Each service is run in a docker container and then an application is created from the 4 services using docker compose.
+Cloud Computing — Diets & Meals Microservices
+=============================================
+
+A containerized microservices application for managing diets, meals, and dishes.
+
+Architecture:
+- Meals/Dishes Service — RESTful API providing nutritional information for meals
+  and dishes (a dish is composed of 3 meals)
+- Diet Service — handles POST/GET requests for different diet types
+- Database Service — MongoDB instance storing all dishes, meals, and diets
+- Reverse Proxy — NGINX routing all incoming requests to the appropriate service
+
+Each service runs in its own Docker container. The full application is
+orchestrated using Docker Compose.
+
+See Diets&Meals/README.txt for full setup and usage instructions.
