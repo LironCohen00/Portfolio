@@ -1,6 +1,6 @@
 # Recipe Cost Optimizer
 
-A Python web application that analyzes recipes using the OpenNutrition MCP database and recommends cheaper alternative ingredients while maintaining similar nutritional profiles.
+A Python web application that analyzes recipes using the OpenNutrition MCP database and recommends cheaper alternative ingredients while maintaining similar nutritional profiles. Created using Replit.
 
 ## Features
 

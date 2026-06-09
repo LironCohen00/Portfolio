@@ -1,7 +1,33 @@
-Objective:
-Write an Assembler program that translates programs written in the symbolic Hack assembly language into binary code that can execute on the Hack hardware platform built in the previous projects.
+Hack Assembler
+==============
 
-When loaded into your assembler, a Prog.asm file containing a valid Hack assembly language program should be translated into the correct Hack binary code and stored in a Prog.hack file.
+A two-pass assembler that translates Hack assembly (.asm) into 16-bit binary
+machine code (.hack) for the Hack hardware platform.
+
+Implementation:
+
+Pass 1 — symbol collection:
+  - Scans the source file without emitting output.
+  - Each label declaration (e.g. (LOOP)) is added to the symbol table
+    with its ROM address (the line count of actual instructions seen so far).
+  - Pre-defined symbols (R0–R15, SP, LCL, ARG, THIS, THAT, SCREEN, KBD) are
+    seeded into the table before the first pass begins.
+
+Pass 2 — code generation:
+  - A-instructions (@value or @symbol): if the operand is a number, encode it
+    directly as a 15-bit binary value. If it's a new variable symbol, allocate
+    it to the next available RAM address (starting at 16) and emit that address.
+  - C-instructions (dest=comp;jump): the parser splits the instruction into
+    its three fields and the Code module looks up each field's bit encoding
+    from fixed tables; the result is the bit string 111accccccdddjjj.
+
+Files:
+- HackAssembler.java — entry point; orchestrates the two passes
+- Parser.java        — tokenises lines into instruction type, symbol, dest, comp, jump
+- Code.java          — maps symbolic fields to their binary encodings
+- SymbolTable.java   — hash-map backed symbol table
 
 Usage:
-Depending on the programming language that you use, the assembler should be invoked using "HackAssembler fileName.asm", where the string fileName.asm is the assembler's input, i.e. the name of a text file containing Hack assembly commands. The assembler creates an output text file named fileName.hack. The output file is stored in the same directory of the input file. The name of the input file may contain a file path.
+  java HackAssembler fileName.asm  →  produces fileName.hack in the same directory
+
+Language: Java

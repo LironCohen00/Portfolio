@@ -1,6 +1,41 @@
-Objective:
-Extend the basic VM translator built in project 7 into a full-scale VM translator. In particular, in project 7 we focused on handling the stack arithmetic and memory access commands of the VM language. We now turn to handle the VM language's branching and function calling commands.
+VM Translator — Control and Functions
+=======================================
 
-Write a full-scale VM-to-Hack translator, extending the basic translator developed in project 7. Use your VM translator to translate VM programs, yielding corresponding programs written in the Hack assembly language.
+Full-scale VM-to-Hack-assembly translator, extending the arithmetic/memory
+translator with branching and function-calling commands.
 
-Note that a VM program may span either a single .vm file or a directory containing one or more .vm files. In the former case, the VM translator is invoked using the command VMTranslator fileName.vm. The translator creates an output file named fileName.asm, which is stored in the same directory of the input file. In the latter case, the VM translator is invoked using VMTranslator dirName. The translator creates a single output file named dirName.asm, which is stored in the same directory. This single file contains the assembly code resulting from translating all the .vm files in the input directory. The name of the input file or directory may contain a file path. If no path is specified, the VM translator operates on the current directory by default.
+Branching translation:
+- label <sym>: emits a Hack assembly label (functionName$sym).
+- goto <sym>: unconditional jump via 0;JMP.
+- if-goto <sym>: pops the top-of-stack; jumps if non-zero (D;JNE).
+
+Function-calling convention translation:
+- function f nVars: emits the function entry label and pushes nVars zeros
+  onto the stack to initialise the function's local variables.
+- call f nArgs: implements the VM calling convention —
+    1. pushes the return address, saved LCL, ARG, THIS, THAT onto the stack
+    2. sets ARG = SP - nArgs - 5 (repositions ARG for the callee)
+    3. sets LCL = SP (new local segment base)
+    4. jumps to the function entry label
+    5. emits the return-address label so execution resumes here after return
+- return: restores the caller's stack frame —
+    1. copies the return value to ARG[0]
+    2. restores SP, THAT, THIS, ARG, LCL from the saved frame
+    3. jumps to the return address
+
+Bootstrap code: the translator prepends assembly that sets SP=256 and
+calls Sys.init, ensuring the VM program starts correctly.
+
+Multi-file support: accepts a directory; concatenates all .vm files and emits
+a single .asm output with all translated code.
+
+Files:
+- VMTranslator.java — entry point; handles single-file and directory input
+- Parser.java       — tokenises VM commands into type, arg1, arg2
+- CodeWriter.java   — emits Hack assembly for all VM command types
+
+Usage:
+  java VMTranslator fileName.vm   →  produces fileName.asm
+  java VMTranslator dirName       →  produces dirName.asm from all .vm files in the directory
+
+Language: Java

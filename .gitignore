@@ -1,1 +1,23 @@
-RecipeEconomizer/mcp-opennutrition/data/ 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Java
+*.class
+
+# IDE
+.vscode/
+.idea/
+
+# Replit
+.replit
+replit.md
+
+# Runtime data
+*.db
+*.sqlite
+*.sqlite3
+
+# RecipeEconomizer MCP dataset
+RecipeEconomizer/mcp-opennutrition/data/
